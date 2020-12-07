@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>加法计算器</title>
+		<style>
+		#box{
+			position:relative;
+			margin-left:400px;
+			margin-top:100px;
+			border:1px solid;
+			width:503px;
+			height:503px;
+		}
+		#boxin{
+			width:500px;
+			height:500px;
+			background-color:#DCDCDC;
+			position:absolute;
+			top:1px;
+			left:1px;
+		}
+		#note{
+			margin:0 auto;
+			width:250px;
+			height:300px;
+			margin-top:30px;			
+			overflow-x:hidden;
+			overflow-y:auto;
+		}
+		#left{
+			float:left;
+			width:120px;
+			height:300px;
+			margin-left:20px;
+		}
+		#right{
+			float:left;
+			width:80px;
+			height:300px;
+			position:relative;
+			right:0px;
+		}
+		#start{
+			margin-top:100px;
+			margin-left:170px;
+		}
+		p{
+			margin-left:20px;
+		}
+		#text2{
+			position:absolute;
+			left:350px;
+		}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<p>倒计时：<span id="time">30</span>s<span id="text2">得分：<span id="score"></span></span></p>
+			<p><span id="add"></span><input type="text" id="result"/></p>
+			<p><input type="submit" value="提交答案" id="commit"/></p>
+			<div id = "boxin">
+				<button  id="start">开始答题</button>
+				<button  id="record">答题记录</button>
+				<div id = "note"><div id="left"></div><div id="right"></div></div>
+			</div>
+		</div>
+		<script>
+			var commit= document.getElementById('commit');
+			var start = document.getElementById('start');
+			var record = document.getElementById('record');
+			var a,b;
+			var resultArray=[],answer=[];
+			var timeid;
+			var i,j=0,s=0,n=0;
+			//点击提交答案，判断答案是否正确 正确得分加10 将所有结果存入数组 并且替换新的题目、自动聚焦
+			commit.onclick=function(){
+				resultArray[j]=a+"+"+b+"="+ document.getElementById('result').value;
+				if(document.getElementById('result').value==a+b){
+					s+=10;
+					score.innerHTML=s;
+					answer[j]="结果:对";
+				}else{
+					answer[j]="结果:错";
+				}
+				j++;
+				document.getElementById('result').value="";
+				a=Math.round(Math.random()*100);
+				b=Math.round(Math.random()*100);
+				add.innerHTML=a+'+'+b+'=';
+				document.getElementById("result").focus();
+			}
+			//点击开始答题 灰色页面被隐藏 然后将两个数组重新置为空，得分置为0，倒计时重新开始，自动出第一道题自动聚焦，倒计时结束时灰色页面再次出现
+			start.onclick=function(){
+				document.getElementById("boxin").style.display = "none";
+				score.innerHTML=0;
+				i=30,s=0,resultArray=[],answer=[],j=0;
+				timeid=setInterval(function(){
+					i--;
+					time.innerHTML=i;
+					if(i<=0){
+						document.getElementById("boxin").style.display = "block";
+						clearInterval(timeid);
+					}
+				},1000);
+				document.getElementById('result').value="";
+				a=Math.round(Math.random()*100);
+				b=Math.round(Math.random()*100);
+				add.innerHTML=a+'+'+b+'=';
+				document.getElementById("result").focus();
+				left.innerHTML="";
+				right.innerHTML="";
+			}
+			//点击答题记录 只出现最近一次的记录 若溢出自动出现滚动条
+			record.onclick=function(){
+				var p="";
+				var q="";
+				for(j=0;j<=resultArray.length-1;j++){
+					p+=resultArray[j]+"</br>";
+					q+=answer[j]+"</br>";	
+					console.log(resultArray[j]+answer[j]);
+				}	
+				left.innerHTML=p;
+				right.innerHTML=q;				
+			}
+		</script>
+	</body>
+</html>
